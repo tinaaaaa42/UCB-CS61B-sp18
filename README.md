@@ -14,3 +14,15 @@ basically how to use **git** and **github**
 submit HelloWorld.java, HelloNumbers.java and LeapYear.java  
 ### HW0: Basic Java Programs (optional)
 basic syntax of java
+
+## 2.1 References, Recursion, and Lists
+difference between reference type and primitives  
+a simple example of IntList  
+### lab2 setup
+set up the IntelliJ
+### lab2 
+learn to debug  
+
+## WorkTime
+-10.27 1.1 lab0 1.2 lab1 HW0
+-10.28 2.1 lab2 lab2(debug part)
