@@ -24,5 +24,5 @@ set up the IntelliJ
 learn to debug  
 
 ## WorkTime
--10.27 1.1 lab0 1.2 lab1 HW0
--10.28 2.1 lab2 lab2(debug part)
+- 10.27 1.1 lab0 1.2 lab1 HW0  
+- 10.28 2.1 lab2 lab2(debug part)  
