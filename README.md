@@ -28,7 +28,30 @@
 - nested classes
 - cathing
 - use sentinel Nodes to show the invariants
+## 2.3 DLLists
+- To make *addLast()* faster, we could add a *last* variable.  
+  But the *removeLast()* would be very slow.
+- What about adding a *secondToLast* pointer?  
+  In fact, it's not helpful, because then we'll need to find the third to  
+  last item to obey the appropriate invariants after removing the last item.
+- Sol: add a previous pointer to each *IntNode*  
+  namely **Doubly Linked List**  
+- Improvement: Sentinel Upgrade  
+  add a second sentinel node to the back of the list
+  Or the front and back pointer share the same sentinel node, making the list circular
+- Generic DLList  
+  public class DLList<Type> {}  
+  DLList<String> d = new DLList<>("hello")  
+## 2.4 Arrays
+- basic array and 2D array
 
 ## WorkTime
-- 10.27 1.1 lab0 1.2 lab1 HW0  
-- 10.28 2.1 lab2_setup lab2 2.2
+- 10.27 1.1 lab0  
+        1.2  
+        lab1  
+        HW0  
+- 10.28 2.1  
+        lab2_setup  
+        lab2  
+        2.2  
+        2.3 & 2.4
