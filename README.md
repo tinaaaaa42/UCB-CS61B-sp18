@@ -37,7 +37,7 @@
 - Sol: add a previous pointer to each *IntNode*  
   namely **Doubly Linked List**  
 - Improvement: Sentinel Upgrade  
-  add a second sentinel node to the back of the list
+  add a second sentinel node to the back of the list  
   Or the front and back pointer share the same sentinel node, making the list circular
 - Generic DLList  
   public class DLList<Type> {}  
