@@ -88,7 +88,7 @@ public class NBody {
 
 	// print the final state of the universe
 	StdOut.printf("%d\n", allPlanets.length);
-	StdOUt.printf("%.2e\n", radius);
+	StdOut.printf("%.2e\n", radius);
 	for (int i=0;i<allPlanets.length;i+=1) {
 
 	    StdOut.printf("%11.4e %11.4e %11.4e %11.4e %11.4e %12s\n",
