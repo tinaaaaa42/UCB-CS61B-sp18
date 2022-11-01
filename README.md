@@ -50,6 +50,18 @@
 - To fasten *get()*, try the ALists.
 - resize **geometric**  
 - memory performance "usage radio" R  
+## 3.1 Testing  
+- Unit Test
+- TDD (*Test-Driven Development*)
+- Integration Testing
+## 4.1 Inheritance, Implements
+- Dog is a **hypernym(superclass)** of poodle, and poodle is **hyponyms(subclass)** of dog.  
+- interface implements
+- @Override  
+- GRoE(Golden Rules of Equals)  
+- Implement Inheritance *default*  
+## lab3 Testing, Debugging
+- Unit Testing(JUnit)  
 
 ## WorkTime
 - 10.27   
@@ -66,3 +78,8 @@
 - 10.29-10.31  
   proj0  
   2.5  
+  3.1  
+  4.1  
+- 11.1  
+  lab3  
+  
