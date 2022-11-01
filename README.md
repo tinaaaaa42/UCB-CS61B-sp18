@@ -44,14 +44,25 @@
   DLList<String> d = new DLList<>("hello")  
 ## 2.4 Arrays
 - basic array and 2D array
+## proj0 NBody  
+- class In StdDraw
+## 2.5 ALists, Resizing, vs. SLists  
+- To fasten *get()*, try the ALists.
+- resize **geometric**  
+- memory performance "usage radio" R  
 
 ## WorkTime
-- 10.27 1.1 lab0  
-        1.2  
-        lab1  
-        HW0  
-- 10.28 2.1  
-        lab2_setup  
-        lab2  
-        2.2  
-        2.3 & 2.4
+- 10.27   
+  1.1 lab0  
+  1.2  
+  lab1   
+  HW0  
+- 10.28  
+  2.1  
+  lab2_setup  
+  lab2  
+  2.2  
+  2.3 & 2.4  
+- 10.29-10.31  
+  proj0  
+  2.5  
