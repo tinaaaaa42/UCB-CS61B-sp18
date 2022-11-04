@@ -1,0 +1,171 @@
+public class ArrayDeque<T> {
+
+    private T[] data;
+    private int nextFirst;
+    private int nextLast;
+    private int size;
+    private final int ReFactor = 2;
+    private final double MaxUsage = 0.25;
+
+    public ArrayDeque() {
+        data = (T[]) new Object[8];
+        nextFirst = 0;
+        nextLast = 1;
+        size = 0;
+    }
+
+    /** Returns the usage of the array. */
+    private double usage() {
+        if (size >= 16) {
+            return (double) size / data.length;
+        }
+        return MaxUsage;
+    }
+
+    /** Resizes when the array is full.
+     *  Precondition: The array is full, namely size == data.length */
+    private void addResize() {
+        int newSize = data.length * ReFactor;
+        T[] newData = (T[]) new Object[newSize];
+
+        for (int i = 0;i<nextLast;i++) {
+            newData[i] = data[i];
+        }
+        if (nextFirst > nextLast) {
+            for (int j = 0; j < data.length - nextFirst; j++) {
+                newData[newSize-j] = data[data.length - j];
+            }
+            nextFirst = newSize - data.length + nextFirst;
+        }
+        data = newData;
+    }
+
+    /** Resizes when the array decreases.
+     *  Precondition: the usage of the array is less than 0.25 */
+    private void removeResize() {
+        while (usage() > MaxUsage) {
+            int newSize = data.length / 2;
+            T[] newData = (T[]) new Object[newSize];
+
+            if (nextLast > newSize) {
+                for (int i = nextFirst; i < nextLast; i++) {
+                    newData[i - nextFirst] = data[i];
+                }
+                nextFirst = 0;
+                nextLast = size + 1;
+            } else if (nextFirst > nextLast) {
+                for (int j = 0; j < data.length - nextFirst; j++) {
+                    newData[newSize - j] = data[data.length - j];
+                }
+                nextFirst = newSize - data.length + nextFirst;
+            } else {
+                for (int i = 0; i < newSize; i++) {
+                    newData[i] = data[i];
+                }
+            }
+
+            data = newData;
+        }
+    }
+
+    /** Adds an item of T to the front of the deque. */
+    public void addFirst(T item) {
+        if (isFull()) {
+            addResize();
+        }
+        data[nextFirst] = item;
+        nextFirst = (nextFirst - 1) % data.length;
+        size ++;
+    }
+
+    /** Adds an item of T to the back of the deque. */
+    public void addLast(T item) {
+        if (isFull()) {
+            addResize();
+        }
+        data[nextLast] = item;
+        nextLast = (nextLast + 1) % data.length;
+        size ++;
+    }
+
+    /** Returns true if deque is empty, false otherwise. */
+    public boolean isEmpty() {
+        if (size == 0) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    /** Returns true if deque is full, false otherwise. */
+    public boolean isFull() {
+        if (size == data.length) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    /** Returns the number of items in the deque. */
+    public int size() {
+        return size;
+    }
+
+    /** Prints the items in the deque from first to nextLast, separated by a space. */
+    public void printDeque() {
+        if (size == 0) {
+            return;
+        }
+        int first = (nextFirst + 1) % data.length;
+        int last = (nextLast - 1) % data.length;
+        if (first <= last) {
+            for (int i = first; i <= last; i++) {
+                System.out.print(data[i] + " ");
+            }
+        }
+        else {
+            for (int i = first; i < data.length; i++) {
+                System.out.print(data[i] + " ");
+            }
+            for (int i = 0; i < nextLast; i++) {
+                System.out.print(data[i] + " ");
+            }
+        }
+    }
+
+    /** Removes and returns the item at the front of the deque. If no such item exists, return null. */
+    public T removeFirst() {
+        if (size == 0) {
+            return null;
+        }
+        int first = (nextFirst + 1) % data.length;
+        T temp = data[first];
+        nextFirst = first;
+        return temp;
+    }
+
+    /** Removes and returns the item at the back of the deque. If no such item exists, return null. */
+    public T removeLast() {
+        if (size == 0) {
+            return null;
+        }
+        int last = (nextLast - 1) % data.length;
+        T temp = data[last];
+        nextLast = last;
+
+        removeResize();
+
+        return temp;
+    }
+    /** Gets the item at the given index, where 0 is the front, 1 is the next item, and so forth.
+      * If no such item exists, returns null. Must not alter the deque! */
+    public T get(int index) {
+        if (index >= size) {
+            return null;
+        }
+        int i = (nextFirst + 1 +index) % data.length;
+        return data[i];
+    }
+}
