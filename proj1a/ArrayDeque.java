@@ -26,20 +26,17 @@ public class ArrayDeque<T> {
      *  Precondition: The array is full, namely size == data.length */
     private void addResize() {
         int first = (nextFirst + 1) % data.length;
-        int last = (nextLast - 1 + data.length) % data.length;
 
         int newSize = data.length * reFactor;
         T[] newData = (T[]) new Object[newSize];
 
-        for (int i = 0; i < nextLast; i++) {
-            newData[i] = data[i];
+        int i = first;
+        for (int j = 0; j < size; j++) {
+            newData[j] = data[i];
+            i = (i + 1) % data.length;
         }
-        if (first > last) {
-            for (int j = 1; j < data.length - nextFirst; j++) {
-                newData[newSize - j] = data[data.length - j];
-            }
-            nextFirst = newSize - data.length + nextFirst;
-        }
+        nextFirst = newSize - 1;
+        nextLast = size;
         data = newData;
     }
 
@@ -48,27 +45,17 @@ public class ArrayDeque<T> {
     private void removeResize() {
         while (usage() > maxUsage) {
             int first = (nextFirst + 1) % data.length;
-            int last = (nextLast - 1 + data.length) % data.length;
 
             int newSize = data.length / 2;
             T[] newData = (T[]) new Object[newSize];
 
-            if (nextLast > newSize) {
-                for (int i = nextFirst; i < nextLast; i++) {
-                    newData[i - nextFirst] = data[i];
-                }
-                nextFirst = 0;
-                nextLast = size + 1;
-            } else if (first > last) {
-                for (int j = 1; j < data.length - nextFirst; j++) {
-                    newData[newSize - j] = data[data.length - j];
-                }
-                nextFirst = newSize - data.length + nextFirst;
-            } else {
-                for (int i = 0; i < newSize; i++) {
-                    newData[i] = data[i];
-                }
+            int i = first;
+            for (int j = 0; j < size; j++) {
+                newData[j] = data[i];
+                i = (i + 1) % data.length;
             }
+            nextFirst = newSize - 1;
+            nextLast = size;
 
             data = newData;
         }

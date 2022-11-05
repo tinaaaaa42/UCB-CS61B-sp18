@@ -1,33 +1,29 @@
 import org.junit.Test;
-import org.junit.Assert;
 
 public class ArrayDequeTest {
     @Test
-    public void TestAdd() {
+    public void testAdd() {
         // Test addFirst and addLast
-        ArrayDeque<Integer> ADList = new ArrayDeque<Integer>();
-        ADList.addFirst(1);
-        ADList.addLast(4);
-        ADList.addFirst(3);
-        ADList.addLast(2);
-        ADList.printDeque();
+        ArrayDeque<Integer> aDList = new ArrayDeque<Integer>();
+        aDList.addFirst(1);
+        aDList.addLast(4);
+        aDList.addFirst(3);
+        aDList.addLast(2);
+        aDList.printDeque();
     }
 
     @Test
-    public void TestRemove() {
+    public void testRemove() {
         // Test removeFirst and removeLast
-        ArrayDeque<Integer> ADList = new ArrayDeque<Integer>();
-        ADList.addFirst(1);
-        ADList.addFirst(2);
-        ADList.addFirst(4);
-        ADList.printDeque();
-        ADList.removeFirst();
-        ADList.printDeque();
-        ADList.removeLast();
-        ADList.printDeque();
+        ArrayDeque<Integer> aDList = new ArrayDeque<Integer>();
+        aDList.addFirst(1);
+        aDList.addFirst(2);
+        aDList.addFirst(4);
+        aDList.printDeque();
+        aDList.removeFirst();
+        aDList.printDeque();
+        aDList.removeLast();
+        aDList.printDeque();
     }
 
-//    public static void main(String[] args) {
-//        TestAdd();
-//    }
 }
