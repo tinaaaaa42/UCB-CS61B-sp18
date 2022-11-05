@@ -126,6 +126,7 @@ public class ArrayDeque<T> {
         int first = (nextFirst + 1) % data.length;
         T temp = data[first];
         nextFirst = first;
+        size--;
         return temp;
     }
 
@@ -138,6 +139,7 @@ public class ArrayDeque<T> {
         int last = (nextLast - 1 + data.length) % data.length;
         T temp = data[last];
         nextLast = last;
+        size--;
 
         removeResize();
 
@@ -150,7 +152,7 @@ public class ArrayDeque<T> {
         if (index >= size) {
             return null;
         }
-        int i = (nextFirst + 1 +index) % data.length;
+        int i = (nextFirst + 1 + index) % data.length;
         return data[i];
     }
 }
