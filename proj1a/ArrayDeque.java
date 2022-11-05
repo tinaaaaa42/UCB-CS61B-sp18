@@ -43,7 +43,7 @@ public class ArrayDeque<T> {
     /** Resizes when the array decreases.
      *  Precondition: the usage of the array is less than 0.25 */
     private void removeResize() {
-        while (usage() > maxUsage) {
+        while (usage() < maxUsage) {
             int first = (nextFirst + 1) % data.length;
 
             int newSize = data.length / 2;
@@ -102,18 +102,11 @@ public class ArrayDeque<T> {
             return;
         }
         int first = (nextFirst + 1) % data.length;
-        int last = (nextLast - 1 + data.length) % data.length;
-        if (first <= last) {
-            for (int i = first; i <= last; i++) {
-                System.out.print(data[i] + " ");
-            }
-        } else {
-            for (int i = first; i < data.length; i++) {
-                System.out.print(data[i] + " ");
-            }
-            for (int i = 0; i < nextLast; i++) {
-                System.out.print(data[i] + " ");
-            }
+
+        int i = first;
+        for (int j = 0; j < size; j++) {
+            System.out.print(data[i] + " ");
+            i = (i + 1) % data.length;
         }
     }
 
