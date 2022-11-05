@@ -3,7 +3,7 @@ import org.junit.Test;
 
 public class TestArrayDequeGold {
     @Test
-    public static void main(String[] args) {
+    public void randomTest() {
         StudentArrayDeque<Integer> sad = new StudentArrayDeque<>();
         ArrayDequeSolution<Integer> ads = new ArrayDequeSolution<>();
 
