@@ -4,8 +4,8 @@ public class ArrayDeque<T> {
     private int nextFirst;
     private int nextLast;
     private int size;
-    private final int ReFactor = 2;
-    private final double MaxUsage = 0.25;
+    private final int reFactor = 2;
+    private final double maxUsage = 0.25;
 
     public ArrayDeque() {
         data = (T[]) new Object[8];
@@ -19,21 +19,24 @@ public class ArrayDeque<T> {
         if (size >= 16) {
             return (double) size / data.length;
         }
-        return MaxUsage;
+        return maxUsage;
     }
 
     /** Resizes when the array is full.
      *  Precondition: The array is full, namely size == data.length */
     private void addResize() {
-        int newSize = data.length * ReFactor;
+        int first = (nextFirst + 1) % data.length;
+        int last = (nextLast - 1 + data.length) % data.length;
+
+        int newSize = data.length * reFactor;
         T[] newData = (T[]) new Object[newSize];
 
-        for (int i = 0;i<nextLast;i++) {
+        for (int i = 0; i < nextLast; i++) {
             newData[i] = data[i];
         }
-        if (nextFirst > nextLast) {
-            for (int j = 0; j < data.length - nextFirst; j++) {
-                newData[newSize-j] = data[data.length - j];
+        if (first > last) {
+            for (int j = 1; j < data.length - nextFirst; j++) {
+                newData[newSize - j] = data[data.length - j];
             }
             nextFirst = newSize - data.length + nextFirst;
         }
@@ -43,7 +46,10 @@ public class ArrayDeque<T> {
     /** Resizes when the array decreases.
      *  Precondition: the usage of the array is less than 0.25 */
     private void removeResize() {
-        while (usage() > MaxUsage) {
+        while (usage() > maxUsage) {
+            int first = (nextFirst + 1) % data.length;
+            int last = (nextLast - 1 + data.length) % data.length;
+
             int newSize = data.length / 2;
             T[] newData = (T[]) new Object[newSize];
 
@@ -53,8 +59,8 @@ public class ArrayDeque<T> {
                 }
                 nextFirst = 0;
                 nextLast = size + 1;
-            } else if (nextFirst > nextLast) {
-                for (int j = 0; j < data.length - nextFirst; j++) {
+            } else if (first > last) {
+                for (int j = 1; j < data.length - nextFirst; j++) {
                     newData[newSize - j] = data[data.length - j];
                 }
                 nextFirst = newSize - data.length + nextFirst;
@@ -74,8 +80,8 @@ public class ArrayDeque<T> {
             addResize();
         }
         data[nextFirst] = item;
-        nextFirst = (nextFirst - 1) % data.length;
-        size ++;
+        nextFirst = (nextFirst - 1 + data.length) % data.length;
+        size++;
     }
 
     /** Adds an item of T to the back of the deque. */
@@ -85,27 +91,17 @@ public class ArrayDeque<T> {
         }
         data[nextLast] = item;
         nextLast = (nextLast + 1) % data.length;
-        size ++;
+        size++;
     }
 
     /** Returns true if deque is empty, false otherwise. */
     public boolean isEmpty() {
-        if (size == 0) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return (size == 0);
     }
 
     /** Returns true if deque is full, false otherwise. */
-    public boolean isFull() {
-        if (size == data.length) {
-            return true;
-        }
-        else {
-            return false;
-        }
+    private boolean isFull() {
+        return (size == data.length);
     }
 
     /** Returns the number of items in the deque. */
@@ -119,13 +115,12 @@ public class ArrayDeque<T> {
             return;
         }
         int first = (nextFirst + 1) % data.length;
-        int last = (nextLast - 1) % data.length;
+        int last = (nextLast - 1 + data.length) % data.length;
         if (first <= last) {
             for (int i = first; i <= last; i++) {
                 System.out.print(data[i] + " ");
             }
-        }
-        else {
+        } else {
             for (int i = first; i < data.length; i++) {
                 System.out.print(data[i] + " ");
             }
@@ -135,7 +130,8 @@ public class ArrayDeque<T> {
         }
     }
 
-    /** Removes and returns the item at the front of the deque. If no such item exists, return null. */
+    /** Removes and returns the item at the front of the deque.
+     *  If no such item exists, return null. */
     public T removeFirst() {
         if (size == 0) {
             return null;
@@ -146,12 +142,13 @@ public class ArrayDeque<T> {
         return temp;
     }
 
-    /** Removes and returns the item at the back of the deque. If no such item exists, return null. */
+    /** Removes and returns the item at the back of the deque.
+     *  If no such item exists, return null. */
     public T removeLast() {
         if (size == 0) {
             return null;
         }
-        int last = (nextLast - 1) % data.length;
+        int last = (nextLast - 1 + data.length) % data.length;
         T temp = data[last];
         nextLast = last;
 
@@ -159,8 +156,9 @@ public class ArrayDeque<T> {
 
         return temp;
     }
-    /** Gets the item at the given index, where 0 is the front, 1 is the next item, and so forth.
-      * If no such item exists, returns null. Must not alter the deque! */
+    /** Gets the item at the given index,
+     *  where 0 is the front, 1 is the next item, and so forth.
+     *  If no such item exists, returns null. Must not alter the deque! */
     public T get(int index) {
         if (index >= size) {
             return null;
