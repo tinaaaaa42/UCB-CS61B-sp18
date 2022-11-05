@@ -120,6 +120,8 @@ public class ArrayDeque<T> {
         T temp = data[first];
         nextFirst = first;
         size--;
+
+        removeResize();
         return temp;
     }
 
