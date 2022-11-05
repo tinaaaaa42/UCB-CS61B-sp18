@@ -15,7 +15,7 @@ public class LinkedListDeque<T> implements Deque<T> {
     private Node sentinel;
 
     /** initialize a linked list deque*/
-    public LinkedListDeque () {
+    public LinkedListDeque() {
         size = 0;
         sentinel = new Node(null, null, null);
         sentinel.prev = sentinel;
@@ -25,28 +25,27 @@ public class LinkedListDeque<T> implements Deque<T> {
     /** Adds an item of T to the prev of the deque. */
     @Override
     public void addFirst(T item) {
-        size ++;
-        sentinel.next = new Node(sentinel, item, sentinel.next); // add the first and link sentinel and first
-        sentinel.next.next.prev = sentinel.next; // link the first and the second
+        size++;
+        // add the first and link sentinel and first
+        sentinel.next = new Node(sentinel, item, sentinel.next);
+        // link the first and the second
+        sentinel.next.next.prev = sentinel.next;
     }
 
     /** Adds an item of T to the back of the deque. */
     @Override
     public void addLast(T item) {
-        size ++;
-        sentinel.prev = new Node(sentinel.prev, item, sentinel); // add the last one and link the last and sentinel
-        sentinel.prev.prev.next = sentinel.prev; // link the last and second last
+        size++;
+        // add the last one and link the last and sentinel
+        sentinel.prev = new Node(sentinel.prev, item, sentinel);
+        // link the last and second last
+        sentinel.prev.prev.next = sentinel.prev;
     }
 
     /** Returns true if deque is empty, false otherwise. */
     @Override
     public boolean isEmpty() {
-        if (size == 0) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return (size == 0);
     }
 
     /** Returns the number of items in the deque. */
@@ -71,7 +70,7 @@ public class LinkedListDeque<T> implements Deque<T> {
     public T removeFirst() {
         T temp = sentinel.next.item;
         if (size > 0) {
-            sentinel.next.next.prev = sentinel; // disconnect the first and second
+            sentinel.next.next.prev = sentinel;
             sentinel.next = sentinel.next.next;
             size--;
         }
@@ -84,15 +83,16 @@ public class LinkedListDeque<T> implements Deque<T> {
     public T removeLast() {
         T temp = sentinel.prev.item;
         if (size > 0) {
-            sentinel.prev.prev.next = sentinel; // disconnect the last and second last
+            sentinel.prev.prev.next = sentinel;
             sentinel.prev = sentinel.prev.prev;
-            size --;
+            size--;
         }
         return temp;
     }
 
-    /** Gets the item at the given index, where 0 is the prev, 1 is the next item, and so forth.
-     *    If no such item exists, returns null. Must not alter the deque! */
+    /** Gets the item at the given index,
+     *  where 0 is the prev, 1 is the next item, and so forth.
+     *  If no such item exists, returns null. Must not alter the deque! */
     @Override
     public T get(int index) {
         if (index >= size) {
@@ -111,7 +111,7 @@ public class LinkedListDeque<T> implements Deque<T> {
         if (index >= size) {
             return null;
         }
-        return getR(index , sentinel.next);
+        return getR(index, sentinel.next);
     }
     private T getR(int index, Node n) {
         if (index == 0) {
