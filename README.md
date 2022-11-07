@@ -8,7 +8,7 @@
 ### lab0: Setting Up Your Computer  
 - download the JDK, git, and run HelloWorld in command line.
 ## 1.2 Defining and using classes
-- classes in java
+- classes in java  
 ### lab1: javac, java, git
 - basically how to use **git** and **github**  
 - submit HelloWorld.java, HelloNumbers.java and LeapYear.java  
@@ -44,7 +44,7 @@
   DLList<String> d = new DLList<>("hello")  
 ## 2.4 Arrays
 - basic array and 2D array
-## proj0 NBody  
+### proj0 NBody  
 - class In StdDraw
 ## 2.5 ALists, Resizing, vs. SLists  
 - To fasten *get()*, try the ALists.
@@ -60,8 +60,10 @@
 - @Override  
 - GRoE(Golden Rules of Equals)  
 - Implement Inheritance *default*  
-## lab3 Testing, Debugging
+### lab3 Testing, Debugging
 - Unit Testing(JUnit)  
+### proj1a proj1b proj1gold  
+- Deque
 
 ## WorkTime
 - 10.27   
@@ -82,4 +84,11 @@
   4.1  
 - 11.1  
   lab3  
+- 11.2  
+  dis1,2,3  
+- 11.3-11.5  
+  proj1a + proj1b + proj1gold  
+- 11.6  
+  4.2 4.3 4.4  
+  
   
