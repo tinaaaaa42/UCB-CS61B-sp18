@@ -65,6 +65,23 @@
 ### proj1a proj1b proj1gold  
 - Deque
 
+## 4.2 Extends, Casting, Higher Order Functions
+- extends  
+- super.methods() super() in the front of the constructor  
+- encapsulation  
+- static type / dynamic type  
+- casting: (poodle) maxDog(a,b)  
+- higher order functions  
+## 4.3 Subtype Polymorphism vs. HoFs  
+- HoF: a common way; Subtype Polymorphism: the object itself makes the choices  
+- Comparable<T> -> compare to others  
+- java.util.Comparator -> compare two things  
+## 4.4 Libraries, Abstract Classes, Packages  
+- Abstract Data Type  
+- Abstract classes  
+- Package  
+
+
 ## WorkTime
 - 10.27   
   1.1 lab0  
