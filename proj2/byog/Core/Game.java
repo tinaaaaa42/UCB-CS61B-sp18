@@ -1,5 +1,8 @@
 package byog.Core;
 
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 
@@ -13,6 +16,19 @@ public class Game {
      * Method used for playing a fresh game. The game should start from the main menu.
      */
     public void playWithKeyboard() {
+    }
+
+    /** get the seed from the input string */
+    public static int getSeed(String input) {
+        int seed = 0;
+        for (int i = 1; i < input.length(); i += 1) {
+            if (input.charAt(i) >= '0' && input.charAt(i) <= '9') {
+                seed = seed * 10 + input.charAt(i) - '0';
+            } else {
+                break;
+            }
+        }
+        return seed;
     }
 
     /**
@@ -32,7 +48,20 @@ public class Game {
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
 
-        TETile[][] finalWorldFrame = null;
-        return finalWorldFrame;
+        if (input.charAt(0) == 'n' || input.charAt(0) == 'N') {
+            int seed = getSeed(input);
+            WorldGenerator w = new WorldGenerator(WIDTH, HEIGHT, seed);
+            TETile[][] finalWorldFrame = w.getWorld();
+            return finalWorldFrame;
+        }
+
+        return null;
+    }
+
+    @Test
+    public void testGetSeed() {
+        assertEquals(123, getSeed("n123"));
+        assertEquals(123, getSeed("n123ss"));
+        assertEquals(1,getSeed("n1ss321"));
     }
 }
