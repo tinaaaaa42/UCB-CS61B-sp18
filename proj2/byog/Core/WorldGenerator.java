@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class WorldGenerator implements Serializable {
+    private static final long serialVersionUID = 321321321321321L;
     public TETile[][] world;
     public int[][] isOccupied;
     private final int width;
@@ -18,6 +19,7 @@ public class WorldGenerator implements Serializable {
     public Position playerPosition;
 
     public static class Position implements Serializable{
+        private static final long serialVersionUID = 132132132132132L;
         public int x;
         public int y;
 
@@ -33,6 +35,7 @@ public class WorldGenerator implements Serializable {
     }
 
     private class Room implements Serializable {
+        private static final long serialVersionUID = 213213213213213L;
         private WorldGenerator.Position position;
         private int roomWidth;
         private int roomHeight;

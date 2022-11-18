@@ -11,6 +11,7 @@ import java.io.*;
 import java.util.Random;
 
 public class keyBoardGameGenerator implements Serializable {
+    private static final long serialVersionUID = 123123123123123L;
     Random r;
     private final int width;
     private final int height;
