@@ -14,7 +14,7 @@ public class Game {
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
-    private static int seedLength = 0;
+    private int seedLength = 0;
 
     /**
      * Method used for playing a fresh game. The game should start from the main menu.
@@ -28,7 +28,7 @@ public class Game {
     }
 
     /** get the seed from the input string */
-    public static long getSeed(String input) {
+    public long getSeed(String input) {
         long seed = 0;
         for (int i = 1; i < input.length(); i += 1) {
             if (input.charAt(i) >= '0' && input.charAt(i) <= '9') {
