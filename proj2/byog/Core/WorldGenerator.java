@@ -3,32 +3,36 @@ package byog.Core;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Random;
 
-public class WorldGenerator {
-    private TETile[][] world;
-    private int[][] isOccupied;
+public class WorldGenerator implements Serializable {
+    public TETile[][] world;
+    public int[][] isOccupied;
     private final int width;
     private final int height;
     Random r;
     private final int ROOMS = 20;
     private Room[] room = new Room[ROOMS];
+    public Position playerPosition;
 
-    private class Position {
-        private int x;
-        private int y;
+    public static class Position implements Serializable{
+        public int x;
+        public int y;
 
-        private Position(int px, int py) {
+        public Position(int px, int py) {
             x = px;
             y = py;
         }
 
-        private boolean equal(Position p) {
+        public boolean equal(Position p) {
             return x == p.x && y == p.y;
         }
+
     }
 
-    private class Room {
+    private class Room implements Serializable {
         private WorldGenerator.Position position;
         private int roomWidth;
         private int roomHeight;
@@ -134,6 +138,8 @@ public class WorldGenerator {
             }
         }
 
+        // generate a player
+        playerGenerator(r);
     }
 
     /** Randomly get a position */
@@ -164,7 +170,7 @@ public class WorldGenerator {
         for (int x = p.x; x < p.x + sizeX; x += 1) {
             for (int y = p.y; y < p.y + sizeY; y += 1) {
                 world[x][y] = t;
-                isOccupied[x][y] = i;
+                isOccupied[x][y] = 1;
             }
         }
     }
@@ -175,24 +181,24 @@ public class WorldGenerator {
         if (start.x - end.x > 0) {
             for (int x = 1; x <= start.x - end.x; x += 1) {
                 world[end.x + x][start.y] = t;
-                isOccupied[end.x + x][start.y] = 100;
+                isOccupied[end.x + x][start.y] = 1;
             }
         } else {
             for (int x = 1; x <= end.x - start.x; x += 1) {
                 world[start.x + x][start.y] = t;
-                isOccupied[start.x + x][start.y] = 100;
+                isOccupied[start.x + x][start.y] = 1;
             }
         }
 
         if (start.y - end.y > 0) {
             for (int y = 1; y <= start.y - end.y; y += 1) {
                 world[end.x][end.y + y] = t;
-                isOccupied[end.x][end.y + y] = 100;
+                isOccupied[end.x][end.y + y] = 1;
             }
         } else {
             for (int y = 1; y <= end.y - start.y; y += 1) {
                 world[end.x][start.y + y] = t;
-                isOccupied[end.x][start.y + y] = 100;
+                isOccupied[end.x][start.y + y] = 1;
             }
         }
     }
@@ -221,6 +227,21 @@ public class WorldGenerator {
             }
         }
 
+    }
+
+    public void playerGenerator(Random r) {
+        ArrayList<Position> place = new ArrayList<>();
+
+        for (int x = 0; x < width; x += 1) {
+            for (int y = 0; y < height; y += 1) {
+                if (isOccupied[x][y] == 1) {
+                    place.add(new Position(x, y));
+                }
+            }
+        }
+        playerPosition = place.get(r.nextInt(place.size()));
+        world[playerPosition.x][playerPosition.y] = Tileset.PLAYER;
+        isOccupied[playerPosition.x][playerPosition.y] = 2;
     }
 
     public TETile[][] getWorld() {
