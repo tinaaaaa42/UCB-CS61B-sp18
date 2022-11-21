@@ -54,7 +54,7 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
         }
         // Dequeue the first item. Don't forget to decrease fillCount and update
         T temp = rb[first];
-        first = (first - 1 + capacity) % capacity;
+        first = (first + 1) % capacity;
         fillCount -= 1;
         return temp;
     }
