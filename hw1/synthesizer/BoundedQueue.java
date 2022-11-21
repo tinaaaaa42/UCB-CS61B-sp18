@@ -1,7 +1,5 @@
 package synthesizer;
 import java.util.Iterator;
-import java.util.Spliterator;
-import java.util.function.Consumer;
 
 public interface BoundedQueue<T> extends Iterable<T> {
     int capacity();     // return size of the buffer

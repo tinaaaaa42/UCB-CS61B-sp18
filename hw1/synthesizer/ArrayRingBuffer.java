@@ -1,5 +1,5 @@
 // Make sure to make this class a part of the synthesizer package
- package synthesizer;
+package synthesizer;
 import java.util.Iterator;
 
 // Make sure to make this class and all of its methods public
@@ -63,6 +63,9 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
      * Return oldest item, but don't remove it.
      */
     public T peek() {
+        if (isEmpty()) {
+            throw new RuntimeException("Ring Buffer Underflow");
+        }
         // Return the first item. None of your instance variables should change.
         return rb[first];
     }
