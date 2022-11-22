@@ -81,6 +81,18 @@
 - Abstract classes  
 - Package  
 
+## 8.1 Disjoint Sets  
+- the Dynamic Connectivity Problem  
+- Put connected objects in an equivalence class  
+- Quick find O(MN)  
+- Quick Union make id[i] the parent of object i  
+- Weighed Quick Union make the root of the smaller tree point to the root of the larger one->O(lgN)  
+- Weighed quick union with path compression O(MlogN)  
+## 8.2 Trees, BSTs  
+- When deleting the root, choose the biggest object in the left BST or the smallest in the right BST
+## 8.3 Balenced BSTs
+- 2-3 and 2-3-4 trees: search and insert  
+- 2-3 trees <=> LLRBs
 
 ## WorkTime
 - 10.27   
