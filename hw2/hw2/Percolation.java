@@ -53,7 +53,7 @@ public class Percolation {
     }
 
     /** cope with the around sites when opening a site */
-    public void aroundSites(int row, int col) {
+    private void aroundSites(int row, int col) {
         int currentIndex = xyToIndex(row, col);
         // top side
         if (row > 0 && isOpen(row - 1, col)) {
@@ -128,5 +128,9 @@ public class Percolation {
      */
     public boolean percolates() {
         return percolationUnion.connected(top, bottom);
+    }
+
+    public static void main(String[] args) {
+
     }
 }

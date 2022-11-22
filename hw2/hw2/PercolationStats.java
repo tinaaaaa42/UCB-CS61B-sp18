@@ -14,7 +14,7 @@ public class PercolationStats {
         totalTime = T;
         experiment = new int[T];
 
-        for (int i = 0; i < N; i += 1) {
+        for (int i = 0; i < T; i += 1) {
             Percolation p = pf.make(N);
             while (!p.percolates()) {
                 int row = StdRandom.uniform(0, N);
