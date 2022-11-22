@@ -4,7 +4,7 @@ import edu.princeton.cs.introcs.StdStats;
 
 public class PercolationStats {
     private final int totalTime;
-    private int[] experiment;
+    private double[] experiment;
     /** perform T independent experiments on an N-by-N grid */
     public PercolationStats(int N, int T, PercolationFactory pf) {
         if (N <= 0 || T <= 0) {
@@ -12,7 +12,7 @@ public class PercolationStats {
         }
 
         totalTime = T;
-        experiment = new int[T];
+        experiment = new double[T];
 
         for (int i = 0; i < T; i += 1) {
             Percolation p = pf.make(N);
@@ -23,7 +23,7 @@ public class PercolationStats {
                     p.open(row, col);
                 }
             }
-            experiment[i] = p.numberOfOpenSites() / (N * N);
+            experiment[i] = (double) p.numberOfOpenSites() / (N * N);
         }
     }
 
