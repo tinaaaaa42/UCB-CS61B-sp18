@@ -7,7 +7,7 @@ import java.util.Set;
  *  A hash table-backed Map implementation. Provides amortized constant time
  *  access to elements via get(), remove(), and put() in the best case.
  *
- *  @author Your name here
+ *  @author tinaaaaa42
  */
 public class MyHashMap<K, V> implements Map61B<K, V> {
 
@@ -23,6 +23,11 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
 
     public MyHashMap() {
         buckets = new ArrayMap[DEFAULT_SIZE];
+        this.clear();
+    }
+
+    public MyHashMap(int initialSize) {
+        buckets = new ArrayMap[initialSize];
         this.clear();
     }
 
@@ -53,19 +58,47 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      */
     @Override
     public V get(K key) {
-        throw new UnsupportedOperationException();
+        if (key == null) {
+            throw new IllegalArgumentException("Null key not allowed.");
+        }
+        int hashIndex = hash(key);
+        return buckets[hashIndex].get(key);
     }
 
     /* Associates the specified value with the specified key in this map. */
     @Override
     public void put(K key, V value) {
-        throw new UnsupportedOperationException();
+        if (key == null) {
+            throw new IllegalArgumentException("Null key not allowed.");
+        }
+        if (value == null) {
+            throw new IllegalArgumentException("Null values not allowed.");
+        }
+        if (loadFactor() > MAX_LF) {
+            resize(2 * buckets.length);
+        }
+        int hashIndex = hash(key);
+        if (!buckets[hashIndex].containsKey(key)) {
+            size += 1;
+        }
+        buckets[hashIndex].put(key, value);
     }
 
     /* Returns the number of key-value mappings in this map. */
     @Override
     public int size() {
-        throw new UnsupportedOperationException();
+        return size;
+    }
+
+    private void resize(int length) {
+        MyHashMap newHashMap = new MyHashMap(length);
+        for (ArrayMap<K, V> b: buckets) {
+            for (K k: b.keySet()) {
+                newHashMap.put(k, b.get(k));
+            }
+        }
+        size = newHashMap.size;
+        buckets = newHashMap.buckets;
     }
 
     //////////////// EVERYTHING BELOW THIS LINE IS OPTIONAL ////////////////
