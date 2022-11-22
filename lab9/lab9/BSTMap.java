@@ -160,27 +160,33 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
             Node parent = p;
             if (downNode.right == null) {
                 p.left = downNode.left;
-                p = downNode;
+                p.key = downNode.key;
+                p.value = downNode.value;
+                return;
             }
             while (downNode.right != null) {
                 parent = downNode;
                 downNode = downNode.right;
             }
             parent.right = downNode.left;
-            p = downNode;
+            p.key = downNode.key;
+            p.value = downNode.value;
         } else if (p.right != null) {
             Node downNode = p.right;
             Node parent = p;
             if (downNode.left == null) {
                 p.right = downNode.right;
-                p = downNode;
+                p.key = downNode.key;
+                p.value = downNode.value;
+                return;
             }
             while (downNode.left != null) {
                 parent = downNode;
                 downNode = downNode.left;
             }
             parent.left = downNode.right;
-            p = downNode;
+            p.key = downNode.key;
+            p.value = downNode.value;
         } else {
             p = null;
         }
@@ -263,4 +269,11 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         assertTrue(b.remove("d", 1) == null);
     }
 
+    public static void main(String[] args) {
+        BSTMap<String, Integer> b = new BSTMap<String, Integer>();
+        b.put("d", 2);
+        b.put("b", 3);
+        b.put("c", 4);
+        b.remove("b");
+    }
 }
