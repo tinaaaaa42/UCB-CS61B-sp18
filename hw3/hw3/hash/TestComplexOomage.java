@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 public class TestComplexOomage {
 
@@ -34,7 +33,7 @@ public class TestComplexOomage {
         assertTrue(OomageTestUtility.haveNiceHashCodeSpread(oomages, 10));
     }
 
-    /* TODO: Create a list of Complex Oomages called deadlyList
+    /* Create a list of Complex Oomages called deadlyList
      * that shows the flaw in the hashCode function.
      */
 
