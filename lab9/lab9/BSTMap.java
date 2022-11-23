@@ -274,6 +274,6 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         b.put("d", 2);
         b.put("b", 3);
         b.put("c", 4);
-        b.remove("b");
+        b.remove("d");
     }
 }
