@@ -92,7 +92,37 @@
 - When deleting the root, choose the biggest object in the left BST or the smallest in the right BST
 ## 8.3 Balenced BSTs
 - 2-3 and 2-3-4 trees: search and insert  
-- 2-3 trees <=> LLRBs
+- 2-3 trees <=> LLRBs  
+## 9.1 Hashing  
+- Instead of the brute force approach, hash the object -> returns an Integer (32 bits)  
+- hashCode() to index conversion: hashCode & 0x7FFFFFFF  
+- good hash function: use all the bits in the key  
+- Collision resolution: Separate chaining & "open addressing"  
+- resizing may lead to objects moving to another linked list
+## 9.2 Heaps and Priority Queues  
+- A max (min) heap is an array representation of a binary tree such that every node is larger than all of its children
+- tree representation  
+## 9.3 Advanced Trees, incl. Geometric  
+### Traversals  
+- Depth First Traversals: pre-odered, in-ordered and post-ordered  
+- Level Order Traversals  
+- Visitor Pattern  
+- Range Finding and Pruning  
+- 2D Quadtrees  
+## 10 Graph  
+### Graph Traversals
+- DFS Preorder, DFS Postorder, BFS  
+- Topological Sorting (reverse of the DFS postorder)  
+## 11.1 Shortest Paths and Dijstra's Algorithm  
+## 11.2 Minimum Spanning Trees, Kruskal's, Prim's  
+- The minimum spanning tree is the spanning tree whose edge weights have the smallest sum  
+- Cut Property: The minimum crossing edge for ANY cut is part of the MST  
+- Prim's Algorithm: Starting from any arbitary source, repeatedly add the shortest edge that connects some vertex in the tree to some vertex outside the tree  
+- Kruskal's Algorithm: add the shortest path that doesn't result in a cycle  
+## 11.3 Dynamic Programming  
+- DAGs: directed acyclc graph  
+- DP: solve subproblems  
+- LLIS (length of longest increasing subsequence)   
 
 ## WorkTime
 - 10.27   
