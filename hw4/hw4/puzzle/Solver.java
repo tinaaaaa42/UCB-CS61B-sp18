@@ -21,7 +21,7 @@ public class Solver {
             this.ws = ws;
             this.moveToThis = moveToThis;
             this.previous = previous;
-            distanceToGoal = ws.estimatedDistanceToGoal();;
+            distanceToGoal = ws.estimatedDistanceToGoal();
         }
     }
 
@@ -41,7 +41,7 @@ public class Solver {
         while (!fringe.isEmpty()) {
             SearchNode currentNode = fringe.delMin();
             if (currentNode.ws.isGoal()) {
-                moves = currentNode.moveToThis;;
+                moves = currentNode.moveToThis;
                 end = currentNode;
                 break;
             }
