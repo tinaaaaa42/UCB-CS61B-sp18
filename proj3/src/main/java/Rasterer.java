@@ -8,9 +8,28 @@ import java.util.Map;
  * not draw the output correctly.
  */
 public class Rasterer {
+    private double ullon, ullat, lrlon, lrlat, width;
+    private double[] lonDPPOfDepth;
+    String[][] renderGrids;
+    int bestDepth;
 
     public Rasterer() {
-        // YOUR CODE HERE
+        lonDPPInitializer();
+
+    }
+
+    /** initialize the lonDPP[] */
+    private void lonDPPInitializer() {
+        lonDPPOfDepth = new double[8];
+        for (int i = 0; i < 8; i += 1) {
+            lonDPPOfDepth[i] = lonDPP(MapServer.ROOT_LRLON,
+                    MapServer.ROOT_ULLON, MapServer.TILE_SIZE) / Math.pow(2, i);
+        }
+    }
+
+    /** @return the longitudinal distance per pixel */
+    private double lonDPP(double lrlon, double ullon, double width) {
+        return (lrlon - ullon) / width;
     }
 
     /**
@@ -44,9 +63,68 @@ public class Rasterer {
     public Map<String, Object> getMapRaster(Map<String, Double> params) {
         // System.out.println(params);
         Map<String, Object> results = new HashMap<>();
-        System.out.println("Since you haven't implemented getMapRaster, nothing is displayed in "
-                           + "your browser.");
+        ullon = params.get("ullon");
+        ullat = params.get("ullat");
+        lrlon = params.get("lrlon");
+        lrlat = params.get("lrlat");
+        width = params.get("w");
+
+        if (!positionLegalChecker(ullon, ullat, lrlon, lrlat)) {
+            results.put("render_grid", null);
+            results.put("raster_ul_lon", 0);
+            results.put("raster_ul_lat", 0);
+            results.put("raster_lr_lon", 0);
+            results.put("raster_lr_lat", 0);
+            results.put("depth", 0);
+            results.put("query_success", false);
+        } else {
+            double queryLonDPP = lonDPP(lrlon, ullon, width);
+            bestDepth = depthChooser(queryLonDPP);
+
+            double lonPer = (MapServer.ROOT_LRLON - MapServer.ROOT_ULLON) / Math.pow(2, bestDepth);
+            double latPer = (MapServer.ROOT_LRLAT - MapServer.ROOT_ULLAT) / Math.pow(2, bestDepth);
+            int ulx = (int) ((ullon - MapServer.ROOT_ULLON) / lonPer);
+            int uly = (int) ((ullat - MapServer.ROOT_ULLAT) / latPer);
+            int lrx = (int) ((lrlon - MapServer.ROOT_ULLON) / lonPer);
+            int lry = (int) ((lrlat - MapServer.ROOT_ULLAT) / latPer);
+
+            renderGrids = new String[lry - uly + 1][lrx - ulx + 1];
+            for (int i = 0; i < renderGrids.length; i++) {
+                for (int j = 0; j < renderGrids[0].length; j++) {
+                    renderGrids[i][j] = "d" + bestDepth
+                            + "_x" + (ulx + j) + "_y" + (uly + i) + ".png";
+                }
+            }
+
+            results.put("render_grid", renderGrids);
+            results.put("raster_ul_lon", MapServer.ROOT_ULLON + ulx * lonPer);
+            results.put("raster_lr_lon", MapServer.ROOT_ULLON + (lrx + 1) * lonPer);
+            results.put("raster_ul_lat", MapServer.ROOT_ULLAT + uly * latPer);
+            results.put("raster_lr_lat", MapServer.ROOT_ULLAT + (lry + 1) * latPer);
+            results.put("depth", bestDepth);
+            results.put("query_success", true);
+        }
         return results;
     }
 
+    /** @return if the given position is legal, return true. Else, return false. */
+    private boolean positionLegalChecker(double ullon, double ullat, double lrlon, double lrlat) {
+        return ullon >= MapServer.ROOT_ULLON && lrlon <= MapServer.ROOT_LRLON
+                && ullat <= MapServer.ROOT_ULLAT && lrlat >= MapServer.ROOT_LRLAT
+                && ullon < lrlon && ullat > lrlat;
+    }
+
+    private int depthChooser(double queryLonDPP) {
+        int best = -1;
+        for (int i = 0; i < lonDPPOfDepth.length; i += 1) {
+            if (lonDPPOfDepth[i] <= queryLonDPP) {
+                best = i;
+                break;
+            }
+        }
+        if (best < 0) {
+            best = 7;
+        }
+        return best;
+    }
 }
