@@ -28,8 +28,8 @@ public class Rasterer {
     }
 
     /** @return the longitudinal distance per pixel */
-    private double lonDPP(double lrlon, double ullon, double width) {
-        return (lrlon - ullon) / width;
+    private double lonDPP(double l, double u, double w) {
+        return (l - u) / w;
     }
 
     /**
@@ -108,10 +108,10 @@ public class Rasterer {
     }
 
     /** @return if the given position is legal, return true. Else, return false. */
-    private boolean positionLegalChecker(double ullon, double ullat, double lrlon, double lrlat) {
-        return ullon >= MapServer.ROOT_ULLON && lrlon <= MapServer.ROOT_LRLON
-                && ullat <= MapServer.ROOT_ULLAT && lrlat >= MapServer.ROOT_LRLAT
-                && ullon < lrlon && ullat > lrlat;
+    private boolean positionLegalChecker(double pUllon, double pUllat, double pLrlon, double pLrlat) {
+        return pUllon >= MapServer.ROOT_ULLON && pLrlon <= MapServer.ROOT_LRLON
+                && pUllat <= MapServer.ROOT_ULLAT && pLrlat >= MapServer.ROOT_LRLAT
+                && pUllon < pLrlon && pUllat > pLrlat;
     }
 
     private int depthChooser(double queryLonDPP) {
