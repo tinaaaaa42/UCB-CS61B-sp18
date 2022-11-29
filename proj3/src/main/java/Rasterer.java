@@ -69,7 +69,7 @@ public class Rasterer {
         lrlat = params.get("lrlat");
         width = params.get("w");
 
-        if (!positionLegalChecker(ullon, ullat, lrlon, lrlat)) {
+        if (!positionChecker(ullon, ullat, lrlon, lrlat)) {
             results.put("render_grid", null);
             results.put("raster_ul_lon", 0);
             results.put("raster_ul_lat", 0);
@@ -108,7 +108,7 @@ public class Rasterer {
     }
 
     /** @return if the given position is legal, return true. Else, return false. */
-    private boolean positionLegalChecker(double pUllon, double pUllat, double pLrlon, double pLrlat) {
+    private boolean positionChecker(double pUllon, double pUllat, double pLrlon, double pLrlat) {
         return pUllon >= MapServer.ROOT_ULLON && pLrlon <= MapServer.ROOT_LRLON
                 && pUllat <= MapServer.ROOT_ULLAT && pLrlat >= MapServer.ROOT_LRLAT
                 && pUllon < pLrlon && pUllat > pLrlat;
