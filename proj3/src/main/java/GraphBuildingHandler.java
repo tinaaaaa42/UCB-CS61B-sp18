@@ -1,9 +1,12 @@
-import org.w3c.dom.Node;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import java.util.*;
+import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  *  Parses OSM XML files using an XML SAX parser. Used to construct the graph of roads for
@@ -108,6 +111,7 @@ public class GraphBuildingHandler extends DefaultHandler {
                 //System.out.println("Max Speed: " + v);
                 /* set the max speed of the "current way" here. */
                 // ignore it
+
             } else if (k.equals("highway")) {
 //                System.out.println("Highway type: " + v);
                 /* Figure out whether this way and its connections are valid. */

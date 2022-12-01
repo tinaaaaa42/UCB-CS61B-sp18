@@ -216,7 +216,7 @@ public class GraphDB {
 
 
     void removeNode(long id) {
-        if (!nodeList.get(id).neighbors.isEmpty()){
+        if (!nodeList.get(id).neighbors.isEmpty()) {
             for (Long neighborID: nodeList.get(id).neighbors) {
                 nodeList.get(neighborID).neighbors.remove(id);
             }
