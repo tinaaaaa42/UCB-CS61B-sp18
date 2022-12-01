@@ -1,5 +1,4 @@
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,7 +24,59 @@ public class Router {
      */
     public static List<Long> shortestPath(GraphDB g, double stlon, double stlat,
                                           double destlon, double destlat) {
-        return null; // FIXME
+        long start = g.closest(stlon, stlat);
+        long destination = g.closest(destlon, destlat);
+        HashMap<Long, Double> disToTarget = new HashMap<>();
+        HashMap<Long, Long> edges = new HashMap<>();
+        HashSet<Long> marked = new HashSet<>();
+
+        PriorityQueue<Long> fringe = new PriorityQueue<>(new Comparator<Long>() {
+            @Override
+            public int compare(Long o1, Long o2) {
+                double d1 = disToTarget.get(o1) + g.distance(o1, destination);
+                double d2 = disToTarget.get(o2) + g.distance(o2, destination);
+
+                if (d1 > d2) {
+                    return 1;
+                } else if (d1 == d2) {
+                    return 0;
+                } else {
+                    return -1;
+                }
+            }
+        });
+
+        for (long id: g.vertices()) {
+            disToTarget.put(id, Double.POSITIVE_INFINITY);
+            edges.put(id, -1L);
+        }
+        disToTarget.put(start, 0.0);
+        edges.put(start, 0L);
+        fringe.add(start);
+
+        while (!fringe.isEmpty()) {
+            long node = fringe.poll();
+            if (node == destination) {
+                break;
+            }
+            if (!marked.contains(node)) {
+                marked.add(node);
+                for (long neighbor: g.adjacent(node)) {
+                    double dis = disToTarget.get(node) + g.distance(neighbor, node);
+                    if (dis < disToTarget.get(neighbor)) {
+                        disToTarget.put(neighbor, dis);
+                        fringe.add(neighbor);
+                        edges.put(neighbor, node);
+                    }
+                }
+            }
+        }
+
+        LinkedList<Long> path = new LinkedList<>();
+        for (long last = destination; last != 0L; last = edges.get(last)) {
+            path.addFirst(last);
+        }
+        return path;
     }
 
     /**
@@ -37,10 +88,54 @@ public class Router {
      * route.
      */
     public static List<NavigationDirection> routeDirections(GraphDB g, List<Long> route) {
-        return null; // FIXME
+        List<NavigationDirection> directionList = new LinkedList<>();
+
+        int preDir = NavigationDirection.START, curDir;
+        
+        String preWay = g.nodeList.get(route.get(0)).getName(), curWay = "";
+
+        NavigationDirection first = new NavigationDirection();
+        first.distance = g.distance(route.get(0), route.get(route.size() - 1));
+        first.way = preWay;
+        first.direction = preDir;
+
+        directionList.add(first);
+        for (int i = 1; i < route.size(); i++) {
+            long start = route.get(i - 1), end = route.get(i);
+            curDir = getDirection(g.bearing(start, end));
+            curWay = g.nodeList.get(route.get(i)).getName();
+            // if there is a change of way
+            if (curDir != preDir) {
+                NavigationDirection instance = new NavigationDirection();
+                instance.way = curWay;
+                instance.distance = g.distance(start, end);
+                instance.direction = curDir;
+                System.out.println(g.bearing(start, end) + curDir + ", " + curWay);
+                directionList.add(instance);
+            }
+            preDir = curDir;
+            preWay = curWay;
+        }
+        return directionList;
     }
 
-
+    private static int getDirection(double bearing) {
+        if (bearing >= -15 && bearing <= 15) {
+            return NavigationDirection.STRAIGHT;
+        } else if (bearing >= -30) {
+            return NavigationDirection.SLIGHT_LEFT;
+        } else if (bearing <= 30) {
+            return NavigationDirection.SLIGHT_RIGHT;
+        } else if (bearing >= -100) {
+            return NavigationDirection.LEFT;
+        } else if (bearing <= 100) {
+            return NavigationDirection.RIGHT;
+        } else if (bearing < -100) {
+            return NavigationDirection.SHARP_LEFT;
+        } else {
+            return NavigationDirection.SHARP_RIGHT;
+        }
+    }
     /**
      * Class to represent a navigation direction, which consists of 3 attributes:
      * a direction to go, a way, and the distance to travel for.

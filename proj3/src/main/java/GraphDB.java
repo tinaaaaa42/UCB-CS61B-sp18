@@ -1,3 +1,4 @@
+import org.slf4j.spi.LocationAwareLogger;
 import org.xml.sax.SAXException;
 
 import java.io.File;
@@ -7,6 +8,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Graph for storing all of the intersection (vertex) and road (edge) information.
@@ -20,6 +24,39 @@ import java.util.ArrayList;
 public class GraphDB {
     /** Your instance variables for storing the graph. You should consider
      * creating helper classes, e.g. Node, Edge, etc. */
+
+    protected class Node {
+        private double lon, lat;
+        private String name;
+        Set<Long> neighbors;
+
+        Node(double lon, double lat) {
+            this.lon = lon;
+            this.lat = lat;
+            neighbors = new HashSet<>();
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
+    private class Location {
+        private double lon, lat;
+        private String name;
+
+        Location(double lon, double lat, String name) {
+            this.lon = lon;
+            this.lat = lat;
+            this.name = name;
+        }
+    }
+
+    HashMap<Long, Node> nodeList = new HashMap<>();
 
     /**
      * Example constructor shows how to create and start an XML parser.
@@ -57,7 +94,7 @@ public class GraphDB {
      *  we can reasonably assume this since typically roads are connected.
      */
     private void clean() {
-        // TODO: Your code here.
+        nodeList.keySet().removeIf(nd -> nodeList.get(nd).neighbors.size() == 0);
     }
 
     /**
@@ -65,8 +102,7 @@ public class GraphDB {
      * @return An iterable of id's of all vertices in the graph.
      */
     Iterable<Long> vertices() {
-        //YOUR CODE HERE, this currently returns only an empty list.
-        return new ArrayList<Long>();
+        return nodeList.keySet();
     }
 
     /**
@@ -75,7 +111,7 @@ public class GraphDB {
      * @return An iterable of the ids of the neighbors of v.
      */
     Iterable<Long> adjacent(long v) {
-        return null;
+        return nodeList.get(v).neighbors;
     }
 
     /**
@@ -136,7 +172,19 @@ public class GraphDB {
      * @return The id of the node in the graph closest to the target.
      */
     long closest(double lon, double lat) {
-        return 0;
+        addNode(-1, lon, lat);
+        double minDistance = Double.MAX_VALUE;
+        long closestID = 0;
+
+        for (Long id: nodeList.keySet()) {
+            double dis = distance(-1, id);
+            if (id != -1 && dis < minDistance) {
+                closestID = id;
+                minDistance = dis;
+            }
+        }
+        removeNode(-1);
+        return closestID;
     }
 
     /**
@@ -145,7 +193,7 @@ public class GraphDB {
      * @return The longitude of the vertex.
      */
     double lon(long v) {
-        return 0;
+        return nodeList.get(v).lon;
     }
 
     /**
@@ -154,6 +202,38 @@ public class GraphDB {
      * @return The latitude of the vertex.
      */
     double lat(long v) {
-        return 0;
+        return nodeList.get(v).lat;
+    }
+
+    /**
+     * Add a node in the graph.
+     * @param id The id of the new node.
+     * @param lat The lat of the new node.
+     * @param lon The lon of the new node.
+     */
+    void addNode(long id, double lon, double lat) {
+        Node node = new Node(lon, lat);
+        nodeList.put(id, node);
+    }
+
+
+    void removeNode(long id) {
+        if (!nodeList.get(id).neighbors.isEmpty()){
+            for (Long neighborID: nodeList.get(id).neighbors) {
+                nodeList.get(neighborID).neighbors.remove(id);
+            }
+        }
+
+        nodeList.keySet().remove(id);
+    }
+
+    /**
+     * Add an edge in the graph.
+     * @param from One end of the edge.
+     * @param to Another end.
+     */
+    void addEdge(long from, long to) {
+        nodeList.get(from).neighbors.add(to);
+        nodeList.get(to).neighbors.add(from);
     }
 }
