@@ -1,4 +1,3 @@
-import org.slf4j.spi.LocationAwareLogger;
 import org.xml.sax.SAXException;
 
 import java.io.File;
@@ -7,7 +6,6 @@ import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;

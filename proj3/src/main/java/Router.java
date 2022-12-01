@@ -91,7 +91,7 @@ public class Router {
         List<NavigationDirection> directionList = new LinkedList<>();
 
         int preDir = NavigationDirection.START, curDir;
-        
+
         String preWay = g.nodeList.get(route.get(0)).getName(), curWay = "";
 
         NavigationDirection first = new NavigationDirection();
