@@ -1,3 +1,5 @@
+import edu.princeton.cs.algs4.Queue;
+
 /**
  * Class for doing Radix sort
  *
@@ -16,8 +18,16 @@ public class RadixSort {
      * @return String[] the sorted array
      */
     public static String[] sort(String[] asciis) {
-        // TODO: Implement LSD Sort
-        return null;
+        int maxLength = 0;
+        String[] sorted = new String[asciis.length];
+        for (int i = 0; i < asciis.length; i++) {
+            maxLength = Math.max(asciis[i].length(), maxLength);
+            sorted[i] = asciis[i];
+        }
+        for (int i = maxLength - 1; i >= 0; i--) {
+            sortHelperLSD(sorted, i);
+        }
+        return sorted;
     }
 
     /**
@@ -27,8 +37,26 @@ public class RadixSort {
      * @param index The position to sort the Strings on.
      */
     private static void sortHelperLSD(String[] asciis, int index) {
-        // Optional LSD helper method for required LSD radix sort
-        return;
+        Queue<String>[] elementsQueue = new Queue[256];
+        for (String s : asciis) {
+            int bucket;
+            if (index >= s.length()) {
+                bucket = '_';
+            } else {
+                bucket = s.charAt(index);
+            }
+            if (elementsQueue[bucket] == null) {
+                elementsQueue[bucket] = new Queue<>();
+            }
+            elementsQueue[bucket].enqueue(s);
+        }
+        int i = 0;
+        for (Queue<String> q : elementsQueue) {
+            while (q != null && !q.isEmpty()) {
+                asciis[i] = q.dequeue();
+                i ++;
+            }
+        }
     }
 
     /**
