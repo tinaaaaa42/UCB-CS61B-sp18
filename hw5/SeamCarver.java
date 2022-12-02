@@ -19,14 +19,6 @@ public class SeamCarver {
             }
         }
 
-        calEnergyM();
-    }
-
-    private double min(double d1, double d2) {
-        if (d1 > d2) {
-            return d2;
-        }
-        return d1;
     }
 
     /** calculate the energy of the pixel at column i and row j */
@@ -58,24 +50,16 @@ public class SeamCarver {
 
     private void calEnergyM() {
         energyM = new double[width][height];
-        for (int col = 0; col < width; col += 1) {
-            energyM[col][0] = energyM[col][0];
+        /* Initialize the values for the first column/row depending on the orientation. */
+        for (int i = 0; i < height; i++) {
+            energyM[0][i] = energy[0][i];
         }
-        for (int row = 1; row < height; row += 1) {
-            if (width == 1) {
-                energyM[0][row] = energyM[0][row - 1] + energy[0][row];
-            } else if (width == 2) {
-                energyM[0][row] = min(energyM[0][row - 1], energyM[1][row - 1]) + energy[0][row];
-                energyM[1][row] = min(energyM[0][row - 1], energyM[1][row - 1]) + energy[1][row];
-            } else if (width >= 3) {
-                energyM[0][row] = min(energyM[0][row - 1], energyM[1][row - 1]) + energy[0][row];
-                energyM[width - 1][row] = min(energyM[width - 2][row - 1],
-                        energyM[width - 1][row - 1]) + energy[width - 1][row];
-                for (int col = 1; col < width - 1; col += 1) {
-                    energyM[col][row] = min(energyM[col - 1][row - 1],
-                            min(energyM[col][row - 1], energyM[col + 1][row - 1]))
-                            + energy[col][row];
-                }
+        /* For the other columns/rows, use the expression above. */
+        for (int i = 1; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                double[][] neighbors = touchingPixelsEnergy(i, j);
+                int minIndex = minEnergy(neighbors[0]);
+                energyM[i][j] = energy[i][j] + neighbors[0][minIndex];
             }
         }
     }
@@ -105,16 +89,14 @@ public class SeamCarver {
 
     /** sequence if indices for horizontal seam */
     public int[] findHorizontalSeam() {
-        energy = transpose();
-        int[] seam = findVerticalSeam();
-        energy = transpose();
-        return seam;
+        calEnergyM();
+        return findSeam();
     }
 
     private double[][] transpose() {
         double[][] transposed = new double[height][width];
-        for (int row = 0; row < height; row++) {
-            for (int col = 0; col < width; col++) {
+        for (int row = 0; row < height; row += 1) {
+            for (int col = 0; col < width; col += 1) {
                 transposed[row][col] = energy[col][row];
             }
         }
@@ -125,84 +107,60 @@ public class SeamCarver {
 
     /** sequence if indices for vertical seam */
     public int[] findVerticalSeam() {
-        calEnergyM();
-        int[][] roads = new int[width][height];
-        int minTotalEnergy = 0;
-        int currentTotalEnergy = 0;
-        int index = 0;
-        for (int i = 0; i < width; i += 1) {
-            roads[i][0] = i;
-        }
-        if (width == 1) {
-            for (int i = 0; i < height; i += 1) {
-                roads[0][i] = 0;
-            }
-        } else if (width == 2) {
-            for (int r = 0; r < width; r += 1) {
-                currentTotalEnergy += energyM[r][0];
-                for (int floor = 1; floor < height; floor += 1) {
-                    if (min(energyM[0][floor], energyM[1][floor]) == energyM[0][floor]) {
-                        roads[r][floor] = 0;
-                        currentTotalEnergy += energyM[0][floor];
-                    } else {
-                        roads[r][floor] = 1;
-                        currentTotalEnergy += energyM[1][floor];
-                    }
-                }
-                if (currentTotalEnergy < minTotalEnergy) {
-                    index = r;
-                    minTotalEnergy = currentTotalEnergy;
-                }
-                currentTotalEnergy = 0;
-            }
-        } else if (width >= 3) {
-            for (int r = 0; r < width; r += 1) {
-                currentTotalEnergy += energyM[r][0];
-                for (int floor = 1; floor < height; floor += 1) {
-                    int last = roads[r][floor - 1];
-                    if (last == 0) {
-                        if (min(energyM[0][floor], energyM[1][floor]) == energyM[0][floor]) {
-                            roads[r][floor] = 0;
-                            currentTotalEnergy += energyM[0][floor];
-                        } else {
-                            roads[r][floor] = 1;
-                            currentTotalEnergy += energyM[1][floor];
-                        }
-                    } else if (last == width - 1) {
-                        if (min(energyM[width - 1][floor], energyM[width - 2][floor])
-                                == energyM[width - 1][floor]) {
-                            roads[r][floor] = width - 1;
-                            currentTotalEnergy += energyM[width - 1][floor];
-                        } else {
-                            roads[r][floor] = width - 2;
-                            currentTotalEnergy += energyM[width - 2][floor];
-                        }
-                    } else {
-                        double nextMin = min(energyM[last - 1][floor],
-                                min(energyM[last][floor], energyM[last + 1][floor]));
-                        if (nextMin == energyM[last - 1][floor]) {
-                            roads[r][floor] = last - 1;
-                            currentTotalEnergy += energyM[last - 1][floor];
-                        } else if (nextMin == energyM[last][floor]) {
-                            roads[r][floor] = last;
-                            currentTotalEnergy += energyM[last][floor];
-                        } else {
-                            roads[r][floor] = last + 1;
-                            currentTotalEnergy += energyM[last + 1][floor];
-                        }
-                    }
-                }
-                if (currentTotalEnergy < minTotalEnergy) {
-                    index = r;
-                    minTotalEnergy = currentTotalEnergy;
-                }
-                currentTotalEnergy = 0;
-            }
-        }
-
-        return roads[index];
+        energy = transpose();
+        int[] seam = findHorizontalSeam();
+        energy = transpose();
+        return seam;
     }
 
+    private double[][] touchingPixelsEnergy(int c, int r) {
+        int topRow = r - 1, midRow = r, btmRow = r + 1;
+        double mid = energyM[c - 1][midRow];
+        if (height == 1) {
+            return new double[][]{{mid}, {midRow}};
+        }
+        if (height == 2) {
+            if (r == 0) {
+                return new double[][]{{mid, energyM[c - 1][btmRow]}, {midRow, btmRow}};
+            } else {
+                return new double[][]{{energyM[c - 1][topRow], mid}, {topRow, midRow}};
+            }
+        }
+        if (r != 0 && r != height - 1) {
+            return new double[][]{
+                    {energyM[c - 1][topRow], mid, energyM[c - 1][btmRow]},
+                    {topRow, midRow, btmRow}};
+        } else if (r == 0) {
+            return new double[][]{{mid, energyM[c - 1][btmRow]}, {midRow, btmRow}};
+        } else {
+            return new double[][]{{energyM[c - 1][topRow], mid}, {topRow, midRow}};
+        }
+    }
+
+    /** Return the index of the minimum energy among values. */
+    private int minEnergy(double[] values) {
+        double minEnergy = Double.MAX_VALUE;
+        int minIndex = -1;
+        for (int i = 0; i < values.length; i++) {
+            if (values[i] < minEnergy) {
+                minEnergy = values[i];
+                minIndex = i;
+            }
+        }
+        return minIndex;
+    }
+
+    private int[] findSeam() {
+        int[] seam = new int[width];
+        int last = minEnergy(energyM[width - 1]);
+        for (int i = width - 1; i > 0; i--) {
+            seam[i] = last;
+            int temp = minEnergy(touchingPixelsEnergy(i, last)[0]);
+            last = (int) touchingPixelsEnergy(i, last)[1][temp];
+        }
+        seam[0] = last;
+        return seam;
+    }
     /** remove horizontal seam from picture */
     public void removeHorizontalSeam(int[] seam) {
         SeamRemover.removeHorizontalSeam(picture, seam);
