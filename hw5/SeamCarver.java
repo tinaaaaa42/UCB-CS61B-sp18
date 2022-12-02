@@ -30,11 +30,11 @@ public class SeamCarver {
     }
 
     /** calculate the energy of the pixel at column i and row j */
-    public double calEnergy(int i, int j) {
+    private double calEnergy(int i, int j) {
         return calEnergyX(i, j) + calEnergyY(i, j);
     }
 
-    public double calEnergyX(int i, int j) {
+    private double calEnergyX(int i, int j) {
         int left = (i - 1 + width) % width;
         int right = (i + 1) % width;
         Color colorLeft = picture.get(left, j);
@@ -45,7 +45,7 @@ public class SeamCarver {
         return redX + greenX + blueX;
     }
 
-    public double calEnergyY(int i, int j) {
+    private double calEnergyY(int i, int j) {
         int up = (j - 1 + height) % height;
         int down = (j + 1) % height;
         Color colorUp = picture.get(i, up);
@@ -82,7 +82,7 @@ public class SeamCarver {
 
     /** current picture */
     public Picture picture() {
-        return picture;
+        return new Picture(picture);
     }
 
     /** width of current picture */
@@ -153,6 +153,7 @@ public class SeamCarver {
                     index = r;
                     minTotalEnergy = currentTotalEnergy;
                 }
+                currentTotalEnergy = 0;
             }
         } else if (width >= 3) {
             for (int r = 0; r < width; r += 1) {
@@ -195,6 +196,7 @@ public class SeamCarver {
                     index = r;
                     minTotalEnergy = currentTotalEnergy;
                 }
+                currentTotalEnergy = 0;
             }
         }
 
