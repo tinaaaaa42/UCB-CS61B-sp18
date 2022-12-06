@@ -133,8 +133,9 @@ public class Boggle {
                     newTrack[i][j] = track[i][j];
                 }
             }
-            newTrack[p.row][p.col] = true;
+
             if (!newTrack[position.row][position.col]) {
+                newTrack[position.row][position.col] = true;
                 String newString = s + board[position.row][position.col];
                 if (ts.prefixFind(newString)) {
                     if (ts.find(newString)) {
@@ -158,7 +159,11 @@ public class Boggle {
         return adj;
     }
 
-    private static boolean legalIndex(int row, int col) {
-        return row >= 0 && row < Boggle.row && col >= 0 && col < width;
+    private static boolean legalIndex(int r, int col) {
+        return r >= 0 && r < row && col >= 0 && col < width;
+    }
+
+    public static void main(String[] args){
+        System.out.println(solve(Integer.valueOf(args[0]) ,args[1]));
     }
 }
