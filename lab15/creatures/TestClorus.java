@@ -3,7 +3,6 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import java.util.HashMap;
 import java.awt.Color;
-import java.util.concurrent.Callable;
 
 import huglife.Direction;
 import huglife.Action;
